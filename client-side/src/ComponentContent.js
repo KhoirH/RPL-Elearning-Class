@@ -4,7 +4,7 @@ class ComponentContent extends Component{
   render() {
     return (
       <div>
-        Gaji: 
+        Konten: 
         {this.props.konten}
       </div>
     )

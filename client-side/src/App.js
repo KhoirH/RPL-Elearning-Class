@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import ComponentName from './ComponentName';
 import './App.css';
-import Logo from './image/logo.svg';
 import Axios from 'axios';
-import ComponentContent from './ComponentContent';
+import Items from './components/Items';
+import Form from './components/Form';
 
 // shouldComponentUpdate
 // PureComponent
@@ -16,40 +15,61 @@ class App extends Component{
   state = {
     data: []
   }
+  // fungsi untuk ngeluarin data
+  fetchData() {
+    Axios.get('http://localhost:3000/posts/')
+    .then((res) => {
+      this.setState({
+        data: res.data.posts
+      });
+    })  
+    .catch((err) => {
+    })
+  }
+  // fungsi untuk buat data
+  createData(e) {
+    Axios.post('http://localhost:3000/posts/', {
+      // title,
+      // content,
+    })
+    .then((res) => {
+      this.fetchData()
+    })  
+    .catch((err) => {
+    })
+  } 
   // component di jalankan setelah render
   componentDidMount() {
-    Axios.get('http://dummy.restapiexample.com/api/v1/employees')
-      .then((res) => {
-        console.log(res);
-        this.setState({
-          data: res.data.data
-        });
-      })  
-      .catch((err) => {
-      })
+    this.fetchData()
   }
   // component di jalankan sebelum render
   componentWillMount(){}
-
+  
   render() {
     return (
-      <div>
-        <img src={Logo} alt="" style={{width:50}} />
-        {
-          this.state.data.map((extdata) => {
-            return (
-              <>      
-                <ComponentName
-                  nama={extdata.employee_name}
-                />
-                <ComponentContent
-                  konten={extdata.employee_salary}
-                />
-              </>
-            )
-          })
-        }
-        
+      <div className='container'>
+        <div className="row">
+          {/* ini untuk fetch data */}
+          <div className='col'>
+            <h2>Data</h2>
+            {
+              this.state.data.map((extdata) => {
+                return (
+                  <Items
+                    title={extdata.title}
+                    content={extdata.content}
+                  />
+                )
+              })
+            }
+          </div>
+          <div className='col'>
+            <h2>Form</h2>
+            <Form
+              onSubmit={this.createData}
+            />
+          </div>
+        </div>
       </div>
     )
   }
