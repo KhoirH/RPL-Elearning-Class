@@ -16,7 +16,7 @@ class App extends Component{
     data: []
   }
   // fungsi untuk ngeluarin data
-  fetchData() {
+  fetchData = () => {
     Axios.get('http://localhost:3000/posts/')
     .then((res) => {
       this.setState({
@@ -27,15 +27,21 @@ class App extends Component{
     })
   }
   // fungsi untuk buat data
-  createData(e) {
+  createData = (e) => {
+    e.preventDefault();
+    const title = e.target.title.value;
+    const content = e.target.content.value;
+
     Axios.post('http://localhost:3000/posts/', {
-      // title,
-      // content,
+      title,
+      content,
     })
     .then((res) => {
       this.fetchData()
     })  
     .catch((err) => {
+      console.log(err);
+      console.log(err);
     })
   } 
   // component di jalankan setelah render

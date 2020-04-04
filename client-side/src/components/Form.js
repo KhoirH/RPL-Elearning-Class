@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 class Form extends Component {
   render() {
     return (
-      <form onSubmit={this.props.onSubmit} method="POST">
+      <form onSubmit={this.props.onSubmit} method="POST" >
         <div class="form-group">
           <label>title</label>
           <input class="form-control" name="title" type="text" />
