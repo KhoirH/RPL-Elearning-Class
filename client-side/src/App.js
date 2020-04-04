@@ -3,6 +3,7 @@ import './App.css';
 import Axios from 'axios';
 import Items from './components/Items';
 import Form from './components/Form';
+import FormEdit from './components/FormEdit';
 
 // shouldComponentUpdate
 // PureComponent
@@ -13,7 +14,8 @@ import Form from './components/Form';
 
 class App extends Component{
   state = {
-    data: []
+    data: [],
+    indexPost: false,
   }
   // fungsi untuk ngeluarin data
   fetchData = () => { 
@@ -59,6 +61,42 @@ class App extends Component{
       console.log(err);
     })
   }
+  // selected index 
+  selectedEdit = (e, index) => {
+    e.preventDefault();
+    // reset indexPost
+    this.setState({
+      indexPost: false
+    });
+    setTimeout(() => {
+      this.setState({
+        indexPost : index
+      })
+    })
+  }
+  // fungsi untuk edit data 
+  editData = (e, id) => {
+    // membuat ini tidak terefresh
+    e.preventDefault();
+        
+    // value
+    const title = e.target.title.value;
+    const content = e.target.content.value;
+
+    Axios.post(`http://localhost:3000/posts/${id}`, {
+      title,
+      content,
+    })
+    .then((res) => {
+      this.setState({
+        indexPost: false,
+      })
+      this.fetchData()
+    })  
+    .catch((err) => {
+      console.log(err);
+    })
+  }
   // component di jalankan setelah render
   componentDidMount() {
     this.fetchData()
@@ -67,6 +105,8 @@ class App extends Component{
   componentWillMount(){}
   
   render() {
+    const singleData = this.state.indexPost !== false ? this.state.data[this.state.indexPost] : {};
+    console.log(singleData);
     return (
       <div className='container'>
         <div className="row">
@@ -74,24 +114,42 @@ class App extends Component{
           <div className='col'>
             <h2>Data</h2>
             {
-              this.state.data.map((extdata) => {
+              this.state.data.map((extdata, index) => {
                 return (
                   <Items
+                    key={index}
                     title={extdata.title}
                     content={extdata.content}
                     id={extdata.id}
+                    index={index}
                     onDeleted={this.deleteData}
+                    onSelected={this.selectedEdit}
                   />
                 )
               })
             }
           </div>
           <div className='col'>
-            <h2>Form</h2>
+            <h2>Form Post</h2>
             {/* untuk nge post data */}
             <Form
               onSubmit={this.createData}
             />
+            {
+              this.state.indexPost !== false
+              ? <>
+                <h2>Form Edit</h2>
+                {/* untuk nge edit data */}
+                <FormEdit
+                  onSubmit={this.editData}
+                  
+                  title={singleData.title}
+                  content={singleData.content}
+                  id={singleData.id}
+                />
+              </>
+              : null
+            }
           </div>
         </div>
       </div>

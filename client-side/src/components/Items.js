@@ -14,7 +14,9 @@ class Items extends Component {
             Delete
           </a>
         
-          <a class="btn btn-info">
+          <a
+            class="btn btn-info"
+            onClick={(e) => this.props.onSelected(e, this.props.index)}>
             Edit
           </a>
         </div>
