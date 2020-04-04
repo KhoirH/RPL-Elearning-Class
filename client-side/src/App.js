@@ -16,7 +16,7 @@ class App extends Component{
     data: []
   }
   // fungsi untuk ngeluarin data
-  fetchData = () => {
+  fetchData = () => { 
     Axios.get('http://localhost:3000/posts/')
     .then((res) => {
       this.setState({
@@ -45,7 +45,20 @@ class App extends Component{
     .catch((err) => {
       console.log(err);
     })
-  } 
+  }
+  // fungsi untuk delete data 
+  deleteData = (e, id) => {
+    // membuat ini tidak terefresh
+    e.preventDefault();
+
+    Axios.post(`http://localhost:3000/posts/destroy/${id}`)
+    .then((res) => {
+      this.fetchData()
+    })  
+    .catch((err) => {
+      console.log(err);
+    })
+  }
   // component di jalankan setelah render
   componentDidMount() {
     this.fetchData()
@@ -66,6 +79,8 @@ class App extends Component{
                   <Items
                     title={extdata.title}
                     content={extdata.content}
+                    id={extdata.id}
+                    onDeleted={this.deleteData}
                   />
                 )
               })
