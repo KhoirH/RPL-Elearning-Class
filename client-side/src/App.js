@@ -28,7 +28,10 @@ class App extends Component{
   }
   // fungsi untuk buat data
   createData = (e) => {
+    // membuat ini tidak terefresh
     e.preventDefault();
+    
+    // value
     const title = e.target.title.value;
     const content = e.target.content.value;
 
@@ -40,7 +43,6 @@ class App extends Component{
       this.fetchData()
     })  
     .catch((err) => {
-      console.log(err);
       console.log(err);
     })
   } 
@@ -71,6 +73,7 @@ class App extends Component{
           </div>
           <div className='col'>
             <h2>Form</h2>
+            {/* untuk nge post data */}
             <Form
               onSubmit={this.createData}
             />
